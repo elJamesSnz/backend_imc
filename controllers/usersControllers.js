@@ -72,6 +72,9 @@ module.exports = {
             //expiresIn: 60 * 60 * 24,
           }
         );
+
+        console.log(rUser.imcs);
+
         const data = {
           id: rUser.id,
           name: rUser.name,
@@ -80,10 +83,10 @@ module.exports = {
           phone: rUser.phone,
           image: rUser.image,
           session_token: `JWT ${token}`,
-          IMCs: rUser.IMCs,
+          //reverse para mostrar el último registrado aka el más reciente.
+          medidas: rUser.imcs.reverse(),
+          //medidas: rUser.imcs,
         };
-
-        console.log(`usuario enviado ${data}`);
 
         return res.status(201).json({
           success: true,
@@ -101,6 +104,29 @@ module.exports = {
       return res.status(501).json({
         success: false,
         message: "Error al hacer login",
+        error: error,
+      });
+    }
+  },
+  //petición asíncrona para insertar nuevos usuarios
+  async addIMC(req, res, next) {
+    try {
+      const med = req.body;
+
+      //se espera a que se termine el  proceso
+      const data = await User.addIMC(med);
+      //Establecer IMC CLIENTE (id 1) por defecto
+      //await IMC.create(data.id, data.id_imc, data.imc_value);
+
+      return res.status(201).json({
+        success: true,
+        message: "Registro de IMC realizado.",
+      });
+    } catch (error) {
+      console.log(`${error}`);
+      return res.status(501).json({
+        success: false,
+        message: "Error con el registro",
         error: error,
       });
     }

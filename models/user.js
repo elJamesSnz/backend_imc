@@ -117,5 +117,27 @@ User.isPwMatched = (uPW, hash) => {
   return false;
 };
 
+//sentencia SQL que crea nuevo usuario
+User.addIMC = (imc) => {
+  const sql = `
+    INSERT INTO
+      user_has_imcs(
+        id_user,
+        id_imc,
+        imc_value,
+        created_at,
+        updated_at
+      )
+    VALUES($1, $2, $3, $4, $5)
+  `;
+  return db.oneOrNone(sql, [
+    imc.id_user,
+    imc.id_imc,
+    imc.imc_value,
+    new Date(),
+    new Date(),
+  ]);
+};
+
 //objeto para el controlador
 module.exports = User;
