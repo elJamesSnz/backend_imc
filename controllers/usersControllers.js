@@ -115,20 +115,27 @@ module.exports = {
 
       //se espera a que se termine el  proceso
       const data = await User.addIMC(med);
-      //Establecer IMC CLIENTE (id 1) por defecto
-      //await IMC.create(data.id, data.id_imc, data.imc_value);
 
       return res.status(201).json({
         success: true,
         message: "Registro de IMC realizado.",
       });
     } catch (error) {
-      console.log(`${error}`);
-      return res.status(501).json({
-        success: false,
-        message: "Error con el registro",
-        error: error,
-      });
+      //probablemente es repetido, se intenta de nuevo
+      console.log(`Add IMC ${error}`);
+      try {
+        await User.deleteIMC(med);
+        return res.status(201).json({
+          success: true,
+          message: "Registro de IMC realizado.",
+        });
+      } catch (error) {
+        return res.status(501).json({
+          success: false,
+          message: "IMC calculado",
+          error: error,
+        });
+      }
     }
   },
 };

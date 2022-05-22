@@ -139,5 +139,18 @@ User.addIMC = (imc) => {
   ]);
 };
 
+User.deleteIMC = (imc) => {
+  const sql = `
+  DELETE FROM 
+    user_has_imcs
+  WHERE 
+    id_user = $1 
+  AND 
+    id_imc = $2;
+    `;
+  //no se retorna nada. Se establece arreglo con valores
+  return db.none(sql, [imc.id_user, imc.id_imc]);
+};
+
 //objeto para el controlador
 module.exports = User;

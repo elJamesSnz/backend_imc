@@ -12,11 +12,15 @@ types.setTypeParser(1114, function (stringValue) {
 
 //configuracion db para testing
 const databaseConfig = {
-  host: "127.0.0.1",
-  port: 5432,
-  database: "imc_db",
-  user: "postgres",
-  password: "+-*pwtest+-*",
+  host: process.env.host,
+  port: process.env.port,
+  database: process.env.db,
+  user: process.env.dbuser,
+  password: process.env.dbpw,
+  //remove the no-encryption error
+  ssl: {
+    rejectUnauthorized: false,
+  },
 };
 
 const db = pgp(databaseConfig);
